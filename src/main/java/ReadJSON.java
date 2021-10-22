@@ -27,25 +27,29 @@ public class ReadJSON {
     }
 
     public static void main(String[] args) throws IOException {
-
         Gson gson = new Gson();
-        Type listType = new TypeToken<List<User>>() {}.getType();
+        Type listType = new TypeToken<List<User>>() {
+        }.getType();
         List<User> user;
-
         user = gson.fromJson(readUsers("https://jsonplaceholder.typicode.com/users"), listType);
 
-        OutputStreamWriter ous = new OutputStreamWriter(new FileOutputStream("users.json"));
-        gson.toJson(user, ous);
-        ous.close();
-
-        XStream xStream = new XStream();
-        try {
-            OutputStreamWriter ous2 = new OutputStreamWriter(new FileOutputStream("users.xml"));
-            xStream.toXML(user, ous2);
-            ous2.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (args[0].equals("-json")) {
+            try {
+                OutputStreamWriter ous = new OutputStreamWriter(new FileOutputStream("users.json"));
+                gson.toJson(user, ous);
+                ous.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        } else if (args[0].equals("-xml")) {
+            XStream xStream = new XStream();
+            try {
+                OutputStreamWriter ous2 = new OutputStreamWriter(new FileOutputStream("users.xml"));
+                xStream.toXML(user, ous2);
+                ous2.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
